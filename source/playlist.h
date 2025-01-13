@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "song.h"
 
 using namespace std;
@@ -10,15 +11,14 @@ using namespace std;
 template <typename GenreType, typename ArtistType>
 class Playlist {
 private:
+    string name;
     vector<shared_ptr<Song<GenreType, ArtistType>>> songs;
 
 public:
+    Playlist(const string& name);
     void addSong(const shared_ptr<Song<GenreType, ArtistType>>& song);
-    void removeSong(const string& title);
     void showSongs() const;
-    void playAll() const;
-    void pauseAll() const;
-    void stopAll() const;
+    string getName() const;
 };
 
 #endif

@@ -1,26 +1,19 @@
 #include "playlist.h"
-#include <algorithm>
 #include <iostream>
 
+// Constructor definition
+template <typename GenreType, typename ArtistType>
+Playlist<GenreType, ArtistType>::Playlist(const string& name) {
+    this->name = name;
+}
+
+// Method to add a song to the playlist
 template <typename GenreType, typename ArtistType>
 void Playlist<GenreType, ArtistType>::addSong(const shared_ptr<Song<GenreType, ArtistType>>& song) {
     songs.push_back(song);
 }
 
-template <typename GenreType, typename ArtistType>
-void Playlist<GenreType, ArtistType>::removeSong(const string& title) {
-    auto it = remove_if(songs.begin(), songs.end(),
-                        [&title](const shared_ptr<Song<GenreType, ArtistType>>& song) {
-                            return song->getTitle() == title;
-                        });
-    if (it != songs.end()) {
-        songs.erase(it, songs.end());
-        cout << "Song \"" << title << "\" removed from playlist.\n";
-    } else {
-        cout << "Song \"" << title << "\" not found in playlist.\n";
-    }
-}
-
+// Method to display all songs in the playlist
 template <typename GenreType, typename ArtistType>
 void Playlist<GenreType, ArtistType>::showSongs() const {
     for (const auto& song : songs) {
@@ -29,25 +22,10 @@ void Playlist<GenreType, ArtistType>::showSongs() const {
     }
 }
 
+// Method to get the playlist name
 template <typename GenreType, typename ArtistType>
-void Playlist<GenreType, ArtistType>::playAll() const {
-    for (const auto& song : songs) {
-        song->play();
-    }
-}
-
-template <typename GenreType, typename ArtistType>
-void Playlist<GenreType, ArtistType>::pauseAll() const {
-    for (const auto& song : songs) {
-        song->pause();
-    }
-}
-
-template <typename GenreType, typename ArtistType>
-void Playlist<GenreType, ArtistType>::stopAll() const {
-    for (const auto& song : songs) {
-        song->stop();
-    }
+string Playlist<GenreType, ArtistType>::getName() const {
+    return name;
 }
 
 // Explicit template instantiation
