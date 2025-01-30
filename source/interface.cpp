@@ -224,38 +224,45 @@ void Interface::MainMenu(vector<Playlist<string, string>> &playlists, const vect
                         }
                         else
                         {
+                            // Display the list of playlists once
+                            cout << "Select a playlist to modify:\n\n";
+                            for (size_t i = 0; i < playlists.size(); ++i)
+                            {
+                                cout << i + 1 << ": " << playlists[i].getName() << "\n\n";
+                            }
+
+                            // Loop until the user enters a valid index or chooses to exit
                             while (true)
                             {
-                                cout << "Select a playlist to modify:\n\n";
-                                for (size_t i = 0; i < playlists.size(); ++i)
-                                {
-                                    cout << i + 1 << ". " << playlists[i].getName() << "\n\n";
-                                }
                                 cout << "Enter the index of the playlist (or 'exit' to go back): ";
                                 getline(cin, input);
 
-                                if (input == "exit") break;
+                                if (input == "exit")
+                                {
+                                    break; // Exit the loop and return to the main menu
+                                }
 
                                 try
                                 {
                                     size_t playlistIndex = stoi(input) - 1;
                                     if (playlistIndex < playlists.size())
                                     {
-                                        // Modify the selected playlist
+                                        // Valid index entered, proceed to modify the playlist
+                                        system("clear");
+                                        cout << "Modify Playlist: " << playlists[playlistIndex].getName() << "\n\n";
+                                        cout << "1. Add a song\n";
+                                        cout << "2. Remove a song\n";
+                                        cout << "3. Show songs in playlist\n";
+                                        cout << "4. Go back to the main menu\n\n";
+                                        cout << "Enter your choice: ";
+
                                         while (true)
                                         {
-                                            system("clear");
-                                            cout << "Modify Playlist: " << playlists[playlistIndex].getName() << "\n\n";
-                                            cout << "1. Add a song\n";
-                                            cout << "2. Remove a song\n";
-                                            cout << "3. Show songs in playlist\n";
-                                            cout << "4. Go back to the main menu\n\n";
-                                            cout << "Enter your choice: ";
-
                                             getline(cin, input);
 
                                             if (input == "1")
                                             {
+                                                // Add a song
                                                 system("clear");
                                                 for (size_t i = 0; i < availableSongs.size(); ++i)
                                                 {
@@ -268,7 +275,8 @@ void Interface::MainMenu(vector<Playlist<string, string>> &playlists, const vect
                                                 {
                                                     cout << "\nEnter the index of the song to add (or 'done' to finish): ";
                                                     getline(cin, input);
-                                                    if (input == "done") break;
+                                                    if (input == "done")
+                                                        break;
                                                     try
                                                     {
                                                         size_t songIndex = stoi(input) - 1;
@@ -290,97 +298,124 @@ void Interface::MainMenu(vector<Playlist<string, string>> &playlists, const vect
                                                             }
                                                             else
                                                             {
-                                                                cout << "The song is already in the playlist. Please choose another song.\n\n";
+                                                                cout << "The song is already in the playlist. Please choose another song.\n";
                                                             }
                                                         }
                                                         else
                                                         {
-                                                            cout << "Invalid index. Please try again.\n\n";
+                                                            cout << "Invalid index. Please try again.\n";
                                                         }
                                                     }
                                                     catch (invalid_argument &)
                                                     {
-                                                        cout << "Invalid input. Please enter a song index or 'done' to finish:";
+                                                        cout << "Invalid input. Please enter a song index or 'done' to finish:\n";
                                                     }
                                                 }
+                                                break;
                                             }
                                             else if (input == "2")
-                                            {
-                                                if (playlists[playlistIndex].getSongs().empty())
-                                                {
-                                                    cout << "Playlist is empty. Cannot remove a song.\n";
-                                                }
-                                                else
-                                                {
-                                                    while (true)
-                                                    {
-                                                        cout << "Remove songs from your playlist by entering their indices (type 'done' when finished): \n";
-                                                        for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
-                                                        {
-                                                            cout << i + 1 << ". ";
-                                                            playlists[playlistIndex].getSongs()[i]->songDetails();
-                                                            cout << endl;
-                                                        }
+{
+    // Remove a song
+    if (playlists[playlistIndex].getSongs().empty())
+    {
+        cout << "Playlist is empty. Cannot remove a song.\n";
+    }
+    else
+    {
+        // Display the list of songs once
+        system("clear");
+        cout << "Remove songs from your playlist by entering their indices (type 'done' when finished): \n\n";
+        for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
+        {
+            cout << i + 1 << ". ";
+            playlists[playlistIndex].getSongs()[i]->songDetails();
+            cout << endl;
+        }
 
-                                                        cout << "Enter the index of the song to remove (or 'done' to finish): ";
-                                                        getline(cin, input);
+        // Loop until the user enters a valid index or types 'done'
+        bool doneRemoving = false;
+        while (!doneRemoving)
+        {
+            cout << "Enter the index of the song to remove (or 'done' to finish): ";
+            getline(cin, input);
 
-                                                        if (input == "done") break;
+            if (input == "done")
+            {
+                doneRemoving = true; // Exit the removal loop
+                break;
+            }
 
-                                                        try
-                                                        {
-                                                            size_t songIndex = stoi(input) - 1;
-                                                            if (songIndex < playlists[playlistIndex].getSongs().size())
-                                                            {
-                                                                auto songToRemove = playlists[playlistIndex].getSongs()[songIndex];
-                                                                playlists[playlistIndex] = playlists[playlistIndex] - songToRemove;
+            try
+            {
+                size_t songIndex = stoi(input) - 1;
+                if (songIndex < playlists[playlistIndex].getSongs().size())
+                {
+                    // Valid index, remove the song
+                    auto songToRemove = playlists[playlistIndex].getSongs()[songIndex];
+                    playlists[playlistIndex] = playlists[playlistIndex] - songToRemove;
 
-                                                                cout << "Song removed. Updated playlist:\n";
-                                                                for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
-                                                                {
-                                                                    cout << i + 1 << ". ";
-                                                                    playlists[playlistIndex].getSongs()[i]->songDetails();
-                                                                    cout << endl;
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                cout << "Invalid index. Please try again." << endl;
-                                                            }
-                                                        }
-                                                        catch (invalid_argument &)
-                                                        {
-                                                            cout << "Invalid input. Please enter a song index or 'done' to finish: ";
-                                                        }
-                                                    }
-                                                }
-                                            }
+                    // Display the updated playlist
+                    cout << "Updated playlist:\n\n";
+                    for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
+                    {
+                        cout << i + 1 << ". ";
+                        playlists[playlistIndex].getSongs()[i]->songDetails();
+                        cout << "\n";
+                    }
+                }
+                else
+                {
+                    // Invalid index, display the error message
+                    cout << "Invalid index. Please try again.\n\n";
+                }
+            }
+            catch (invalid_argument &)
+            {
+                // Invalid input (not a number), display the error message
+                cout << "Invalid input. Please enter a song index or 'done' to finish.\n\n";
+            }
+        }
+
+        if (doneRemoving)
+        {
+            break; // Exit the outer loop and return to the previous menu
+        }
+    }
+}
                                             else if (input == "3")
                                             {
-                                                cout << "Songs in playlist '" << playlists[playlistIndex].getName() << "':\n";
+                                                // Show songs in playlist
+                                                system("clear");
+                                                cout << "Songs in playlist '" << playlists[playlistIndex].getName() << "':\n\n";
                                                 playlists[playlistIndex].showSongs();
                                                 cout << "Press enter to go back...";
                                                 getline(cin, input);
+                                                break;
                                             }
                                             else if (input == "4")
                                             {
+                                                // Go back to the main menu
                                                 break;
                                             }
                                             else
                                             {
-                                                cout << "Invalid choice. Please try again.\n";
+                                                // Invalid choice, display the error message without re-displaying the menu
+                                                cout << "Invalid choice. Please try again.\n\n";
+                                                cout << "Enter your choice: ";
                                             }
                                         }
-                                        break;
+                                        break; // Exit the playlist selection loop after modifying the playlist
                                     }
                                     else
                                     {
-                                        cout << "Invalid index. Please try again.\n";
+                                        // Invalid index, prompt the user to try again
+                                        cout << "Invalid index. Please enter a valid index or 'exit' to go back.\n\n";
                                     }
                                 }
                                 catch (invalid_argument &)
                                 {
-                                    cout << "Invalid input. Please enter a valid index or 'exit' to go back.\n";
+                                    // Invalid input (not a number), prompt the user to try again
+                                    cout << "Invalid input. Please enter a valid index or 'exit' to go back.\n\n";
                                 }
                             }
                         }

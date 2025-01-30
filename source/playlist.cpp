@@ -169,6 +169,8 @@ Playlist<GenreType, ArtistType> Playlist<GenreType, ArtistType>::operator-(const
         if (it != songs.end())
         {
             songs.erase(it);
+            // 
+            system("clear");
             cout << "Removed: " << song->getTitle() << endl;
         }
         else
