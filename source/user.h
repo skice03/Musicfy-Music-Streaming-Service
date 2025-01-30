@@ -6,21 +6,20 @@
 
 using namespace std;
 
-class User {
+class User
+{
 private:
     string username;
     string password;
 
 public:
-    // Default constructor
+    // contructor de baza
     User() : username(""), password("") {}
-    // Constructor
     User(string name, string pass);
-
-    // Methods
+    
     bool login(string name, string pass) const;
     void logout();
-    static bool loadUsersFromFile(const string& filename, vector<User>& users);
+    static bool loadUsersFromFile(const string &filename, vector<User> &users);
 };
 
 #endif
