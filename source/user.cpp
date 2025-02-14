@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-// contructor
+// constructor
 User::User(string name, string pass)
 {
     this->username = name;

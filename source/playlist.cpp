@@ -9,14 +9,13 @@ Playlist<GenreType, ArtistType>::Playlist(const string &name)
     this->name = name;
 }
 
-// add song
+// add / remove / display songs
 template <typename GenreType, typename ArtistType>
 void Playlist<GenreType, ArtistType>::addSong(const shared_ptr<Song<GenreType, ArtistType>> &song)
 {
     songs.push_back(song);
 }
 
-// remove song
 template <typename GenreType, typename ArtistType>
 void Playlist<GenreType, ArtistType>::removeSong(const shared_ptr<Song<GenreType, ArtistType>> &song)
 {
@@ -27,7 +26,6 @@ void Playlist<GenreType, ArtistType>::removeSong(const shared_ptr<Song<GenreType
     }
 }
 
-// display songs
 template <typename GenreType, typename ArtistType>
 void Playlist<GenreType, ArtistType>::showSongs() const
 {
@@ -60,9 +58,15 @@ void Playlist<GenreType, ArtistType>::createPlaylist(vector<Playlist<GenreType, 
         cout << "Enter a name for your new playlist: ";
         getline(cin, playlistName);
         cout<<endl;
-        if (playlistName.empty())
+      //  if (playlistName.empty())
+        //{
+          //  cout << "Playlist name cannot be empty. Please try again.\n";
+            //continue;
+        //}
+
+        if (playlistName.find_first_not_of(' ') == string::npos)
         {
-            cout << "Playlist name cannot be empty. Please try again.\n";
+            cout << "Playlist name cannot be empty or just spaces. Please try again.\n";
             continue;
         }
 
@@ -97,7 +101,6 @@ void Playlist<GenreType, ArtistType>::createPlaylist(vector<Playlist<GenreType, 
         cout << endl;
     }
 
-    // add songs to playlist until input is "done"
     while (true)
     {
         string input;
@@ -147,7 +150,7 @@ void Playlist<GenreType, ArtistType>::createPlaylist(vector<Playlist<GenreType, 
     cout << "Playlist '" << playlistName << "' created successfully.\n";
 }
 
-// operator overloading for adding a song to the playlist
+// implementare operator overloading pt. a adauga (+) / sterge (-) song din playlist
 template <typename GenreType, typename ArtistType>
 Playlist<GenreType, ArtistType> Playlist<GenreType, ArtistType>::operator+(const shared_ptr<Song<GenreType, ArtistType>> &song)
 {
@@ -155,7 +158,6 @@ Playlist<GenreType, ArtistType> Playlist<GenreType, ArtistType>::operator+(const
     return *this;
 }
 
-// operator overloading for removing a song from the playlist
 template <typename GenreType, typename ArtistType>
 Playlist<GenreType, ArtistType> Playlist<GenreType, ArtistType>::operator-(const shared_ptr<Song<GenreType, ArtistType>> &song)
 {
@@ -169,7 +171,6 @@ Playlist<GenreType, ArtistType> Playlist<GenreType, ArtistType>::operator-(const
         if (it != songs.end())
         {
             songs.erase(it);
-            // 
             system("clear");
             cout << "Removed: " << song->getTitle() << endl;
         }

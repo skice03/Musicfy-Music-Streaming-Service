@@ -46,9 +46,7 @@ void Song<GenreType, ArtistType>::pause() const
 }
 
 template <typename GenreType, typename ArtistType>
-void Song<GenreType, ArtistType>::stop() const
-{
-}
+void Song<GenreType, ArtistType>::stop() const {}
 
 template <typename GenreType, typename ArtistType>
 Song<GenreType, ArtistType>::~Song() {}

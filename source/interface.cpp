@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// interfata din app
 void Interface::LoginWindow(string &name, string &pass)
 {
     system("clear");
@@ -221,6 +222,9 @@ void Interface::MainMenu(vector<Playlist<string, string>> &playlists, const vect
                         if (playlists.empty())
                         {
                             cout << "No playlists available. Create a new playlist first.\n";
+                            cout << "Press any key to return to the main menu...";
+                            string input;
+                            getline(cin, input); // Wait for user input before returning
                         }
                         else
                         {
@@ -314,74 +318,74 @@ void Interface::MainMenu(vector<Playlist<string, string>> &playlists, const vect
                                                 break;
                                             }
                                             else if (input == "2")
-{
-    // Remove a song
-    if (playlists[playlistIndex].getSongs().empty())
-    {
-        cout << "Playlist is empty. Cannot remove a song.\n";
-    }
-    else
-    {
-        // Display the list of songs once
-        system("clear");
-        cout << "Remove songs from your playlist by entering their indices (type 'done' when finished): \n\n";
-        for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
-        {
-            cout << i + 1 << ". ";
-            playlists[playlistIndex].getSongs()[i]->songDetails();
-            cout << endl;
-        }
+                                            {
+                                                // Remove a song
+                                                if (playlists[playlistIndex].getSongs().empty())
+                                                {
+                                                    cout << "Playlist is empty. Cannot remove a song.\n"<<"\nEnter your choice: ";
+                                                }
+                                                else
+                                                {
+                                                    // Display the list of songs once
+                                                    system("clear");
+                                                    cout << "Remove songs from your playlist by entering their indices (type 'done' when finished): \n\n";
+                                                    for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
+                                                    {
+                                                        cout << i + 1 << ". ";
+                                                        playlists[playlistIndex].getSongs()[i]->songDetails();
+                                                        cout << endl;
+                                                    }
 
-        // Loop until the user enters a valid index or types 'done'
-        bool doneRemoving = false;
-        while (!doneRemoving)
-        {
-            cout << "Enter the index of the song to remove (or 'done' to finish): ";
-            getline(cin, input);
+                                                    // Loop until the user enters a valid index or types 'done'
+                                                    bool doneRemoving = false;
+                                                    while (!doneRemoving)
+                                                    {
+                                                        cout << "Enter the index of the song to remove (or 'done' to finish): ";
+                                                        getline(cin, input);
 
-            if (input == "done")
-            {
-                doneRemoving = true; // Exit the removal loop
-                break;
-            }
+                                                        if (input == "done")
+                                                        {
+                                                            doneRemoving = true; // Exit the removal loop
+                                                            break;
+                                                        }
 
-            try
-            {
-                size_t songIndex = stoi(input) - 1;
-                if (songIndex < playlists[playlistIndex].getSongs().size())
-                {
-                    // Valid index, remove the song
-                    auto songToRemove = playlists[playlistIndex].getSongs()[songIndex];
-                    playlists[playlistIndex] = playlists[playlistIndex] - songToRemove;
+                                                        try
+                                                        {
+                                                            size_t songIndex = stoi(input) - 1;
+                                                            if (songIndex < playlists[playlistIndex].getSongs().size())
+                                                            {
+                                                                // Valid index, remove the song
+                                                                auto songToRemove = playlists[playlistIndex].getSongs()[songIndex];
+                                                                playlists[playlistIndex] = playlists[playlistIndex] - songToRemove;
 
-                    // Display the updated playlist
-                    cout << "Updated playlist:\n\n";
-                    for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
-                    {
-                        cout << i + 1 << ". ";
-                        playlists[playlistIndex].getSongs()[i]->songDetails();
-                        cout << "\n";
-                    }
-                }
-                else
-                {
-                    // Invalid index, display the error message
-                    cout << "Invalid index. Please try again.\n\n";
-                }
-            }
-            catch (invalid_argument &)
-            {
-                // Invalid input (not a number), display the error message
-                cout << "Invalid input. Please enter a song index or 'done' to finish.\n\n";
-            }
-        }
+                                                                // Display the updated playlist
+                                                                cout << "Updated playlist:\n\n";
+                                                                for (size_t i = 0; i < playlists[playlistIndex].getSongs().size(); ++i)
+                                                                {
+                                                                    cout << i + 1 << ". ";
+                                                                    playlists[playlistIndex].getSongs()[i]->songDetails();
+                                                                    cout << "\n";
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                // Invalid index, display the error message
+                                                                cout << "Invalid index. Please try again.\n\n";
+                                                            }
+                                                        }
+                                                        catch (invalid_argument &)
+                                                        {
+                                                            // Invalid input (not a number), display the error message
+                                                            cout << "Invalid input. Please enter a song index or 'done' to finish.\n\n";
+                                                        }
+                                                    }
 
-        if (doneRemoving)
-        {
-            break; // Exit the outer loop and return to the previous menu
-        }
-    }
-}
+                                                    if (doneRemoving)
+                                                    {
+                                                        break; // Exit the outer loop and return to the previous menu
+                                                    }
+                                                }
+                                            }
                                             else if (input == "3")
                                             {
                                                 // Show songs in playlist
